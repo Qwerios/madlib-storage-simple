@@ -3,33 +3,21 @@
 ( ( factory ) ->
     if typeof exports is "object"
         module.exports = factory(
-            require "madlib-settings"
         )
     else if typeof define is "function" and define.amd
         define( [
-            "madlib-settings"
         ], factory )
 
-)( ( settings ) ->
+)( () ->
 
-    # Set default storage name in the settings
+    # Web browser localStorage is the interface we are emulating
+    # Just return the original if we are in the browser
     #
-    settings.init( "simpleStorageDatabase", "madSimpleStorage" )
+    return localStorage if localStorage?
 
-    databaseName = settings.get( "simpleStorageDatabase" )
-    storage      = undefined
-
-    # Initialize storage based on availability
-    #
-    if localStorage?
-        # Web browser localStorage is the interface we are emulating
-        # Just return the original if we are in the browser
-        #
-        storage = localStorage
-
-    else if Ti?
+    if Ti?
         itemCount = 0
-        dbStorage = Ti.Database.open( databaseName )
+        dbStorage = Ti.Database.open( "madlibSimpleStorage" )
 
         # Initialise the database if needed
         #
@@ -96,5 +84,7 @@
                 else
                     return undefined
 
-    return storage
+        return storage
+
+    return
 )
