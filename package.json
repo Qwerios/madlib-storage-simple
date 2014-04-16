@@ -1,20 +1,20 @@
 {
   "name": "madlib-storage-simple",
-  "description": "A wrapper for localstorage that also works on titanium using a native solution",
+  "description": "A wrapper for localstorage that also works on titanium and nodejs",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
   "version": "0.1.4",
   "author": {
     "name": "Mark Doeswijk",
-    "email": "mark.doeswijk@marviq.com",
-    "url": "https://github.com/Marviq"
+    "email": "mdoeswijk@gmail.com",
+    "url": "https://github.com/Qwerios"
   },
   "repository": {
     "type": "git",
-    "url": "https://stash.marviq.com/scm/mad/storage-simple.git"
+    "url": "https://github.com/Qwerios/madlib-storage-simple.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "command -v grunt >/dev/null 2>&1 && grunt test || { echo >&2 'Grunt is not installed'; }",
     "prepublish": "command -v grunt >/dev/null 2>&1 && grunt || { echo >&2 'Grunt is not installed'; }"
   },
   "devDependencies": {
