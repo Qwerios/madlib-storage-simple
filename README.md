@@ -1,4 +1,8 @@
-# madlib-storage-simple [![Build Status](https://travis-ci.org/Qwerios/madlib-storage-simple.svg?branch=master)](https://travis-ci.org/Qwerios/madlib-storage-simple)
+# madlib-storage-simple
+[![Build Status](https://travis-ci.org/Qwerios/madlib-storage-simple.svg?branch=master)](https://travis-ci.org/Qwerios/madlib-storage-simple) [![NPM version](https://badge.fury.io/js/madlib-storage-simple.png)](http://badge.fury.io/js/madlib-storage-simple) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+
+[![Npm Downloads](https://nodei.co/npm/madlib-storage-simple.png?downloads=true&stars=true)](https://nodei.co/npm/madlib-storage-simple.png?downloads=true&stars=true)
+
 A wrapper for localstorage that also works on titanium and nodejs
 
 
