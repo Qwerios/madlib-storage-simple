@@ -3,7 +3,7 @@
   "description": "A wrapper for localstorage that also works on titanium and nodejs",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": {
     "name": "Mark Doeswijk",
     "email": "mdoeswijk@gmail.com",
