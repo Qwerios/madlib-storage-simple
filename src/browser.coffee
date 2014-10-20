@@ -9,13 +9,24 @@
         ], factory )
 )( () ->
 
+    checkLocalStorageAvailable = () ->
+        checkAvailable = "testing123"
+        try
+            localStorage.setItem( checkAvailable, checkAvailable )
+            localStorage.removeItem( checkAvailable )
+            return true
+        catch e
+            console?.warn( "[madlib-storage-simple] localStorage not available", e )
+            return false
+
     # Web browser localStorage is the interface we are emulating
     # Just return the original if we are in the browser
     #
-    return localStorage if localStorage?
+    if checkLocalStorageAvailable()
+        return localStorage
 
-    if Ti?
-        # For Titanium will will emulate localStorage using a simpleDB
+    else if Ti?
+        # For Titanium will will emulate localStorage using a simpleDB solution
         #
         itemCount = 0
         dbStorage = Ti.Database.open( "madlibSimpleStorage" )
@@ -43,7 +54,7 @@
                     )
                     resultSet.next()
 
-                return result;
+                return result
 
             getItem: ( key ) ->
                 return false if typeof key isnt "string"
@@ -61,19 +72,23 @@
                 #
                 if storage.getItem( key ) is undefined
                     dbStorage.execute( "INSERT INTO items VALUES('#{key}','#{value}')" )
+                    updateItemCount()
                     return dbStorage.getRowsAffected() > 0
                 else
                     dbStorage.execute( "UPDATE items SET value='#{value}' WHERE key='#{key}'" )
+                    updateItemCount()
                     return dbStorage.getRowsAffected() > 0
 
             removeItem: ( key ) ->
                 return false if typeof key isnt "string"
 
                 dbStorage.execute( "DELETE FROM items WHERE key='#{key}'" )
+                updateItemCount()
                 return dbStorage.getRowsAffected() > 0
 
             clear: () ->
                 dbStorage.execute( "DELETE FROM items" )
+                updateItemCount()
                 return dbStorage.getRowsAffected() > 0
 
             key: ( index ) ->
@@ -87,5 +102,61 @@
 
         return storage
 
-    return
+    else
+        # Return an in-memory alternative
+        #
+        console?.warn( "[madlib-storage-simple] Using an in-memory storage alternative" )
+        itemCount = 0
+        dbStorage = []
+
+        storage =
+            length: itemCount
+
+            getAll: ()->
+                result = []
+
+                for key, value of dbStorage
+                    result.push(
+                        key:    key
+                        value:  value
+                    )
+
+                return result
+
+            getItem: ( key ) ->
+                return dbStorage[ key ]
+
+            setItem: ( key, value ) ->
+                return if typeof key isnt "string" and typeof value isnt "string"
+
+                dbStorage[ key ] = value
+                itemCount++
+                return true
+
+            removeItem: ( key ) ->
+                return false if typeof key isnt "string"
+
+                if dbStorage[ key ]
+                    delete dbStorage[ key ]
+                    itemCount--
+
+                return true
+
+            clear: () ->
+                dbStorage = {}
+                itemCount = 0
+                return true
+
+            key: ( index ) ->
+                return false if typeof index isnt "number"
+
+                i = 0
+                for key, value of dbStorage
+                    if index is i
+                        return key
+                    i++
+
+                return
+
+        return storage
 )
